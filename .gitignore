@@ -54,4 +54,8 @@ dkms.conf
 # debug information files
 *.dwo
 
-*(executable,!hasext)
+# input txt files
+*.txt
+
+# executables
+build/
