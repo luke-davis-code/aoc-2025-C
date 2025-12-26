@@ -10,27 +10,25 @@ int main() {
   FILE *fptr = fopen("input.txt", "r");
   
   int dial = 50;
-  int count = 0;
+  int password = 0;
+  int i;
 
   if (fptr != NULL) {
     char line[100];
     while (fgets(line, sizeof(line), fptr) != NULL) {
-      char *number = line+1;
-     
-      if (line[0] == 'L') {
-        dial = modulo(dial-atoi(number), 100);
-      }
-      else if (line[0] == 'R') {
-        dial = modulo(dial+atoi(number), 100);
-      }
- 
-      if (dial == 0) {
-        count += 1; 
+      char direction = line[0];
+      int distance = atoi(line+1);
+
+      for (i = 0; i < distance; i++) {
+        dial = direction == 'L' ? modulo(dial-1, 100) : modulo(dial+1, 100);
+        if (dial == 0) {
+          password += 1;
+        }
       }
     }
   }
   
-  printf("%d", count);
+  printf("%d", password);
   
   return 0;
 }
