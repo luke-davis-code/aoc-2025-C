@@ -1,24 +1,26 @@
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int isValid(char *id) {
-  int len = strlen(id);
-  if (len % 2) {
-    return 0;
-  }
+int isInvalid(char *id) {
+  int length = strlen(id);
+  int halfLength = length / 2;
 
-  int halflen = len / 2;
-  char half1[halflen+1];
-  char half2[halflen+1];
+  for (int i = halfLength; i > 0; i--) {
+    if (length % i == 0) {
+      int comparisonCount = (length / i) - 1;
+      int invalid = 0;
+      while (comparisonCount > 0) {
+        int comparison = strncmp(id + (i * (comparisonCount - 1)),
+                                 id + (i * comparisonCount), i);
+        invalid += abs(comparison);
+        comparisonCount -= 1;
+      }
 
-  strncpy(half1, id, halflen);
-  half1[halflen] = '\0';
-  strncpy(half2, id+halflen, halflen);
-  half2[halflen] = '\0';
-  
-  if (strcmp(half1, half2) == 0) {
-    return 1;
+      if (invalid == 0) {
+        return 1;
+      }
+    }
   }
 
   return 0;
@@ -29,7 +31,7 @@ long long checkRange(char *lower, char *upper) {
   for (long long i = atoll(lower); i <= atoll(upper); i++) {
     char strnum[16];
     sprintf(strnum, "%lld", i);
-    if (isValid(strnum)) {
+    if (isInvalid(strnum)) {
       total += i;
     }
   }
@@ -53,11 +55,11 @@ int main(int argc, char *argv[]) {
   fgets(input, 1000, fptr);
 
   long long total = 0;
- 
+
   char id1[16] = "";
   char id2[16] = "";
   int hitDash = 0;
-  for(int i=0; input[i]; i++){
+  for (int i = 0; input[i]; i++) {
     if (input[i] == '-') {
       hitDash = 1;
     } else if (input[i] == ',') {
